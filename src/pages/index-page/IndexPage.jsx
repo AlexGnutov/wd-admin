@@ -6,13 +6,15 @@ import SeancesSchedule from "../../components/conf-steps/seances-schedule/Seance
 import SalesStart from "../../components/conf-steps/sales-start/SalesStart";
 import AddHallPopup from "../../components/popups/AddHallPopup";
 import DeleteHallPopup from "../../components/popups/DeleteHallPopup";
-import AddMoviePopup from "../../components/popups/AddMoviePopup";
+import AddFilmPopup from "../../components/popups/AddFilmPopup";
 import AddSeancePopup from "../../components/popups/AddSeancePopup";
 import {loadHallsThunk} from "../../store/thunks/halls-thunks";
 import {loadFilmsThunk} from "../../store/thunks/films-thunks";
 import {loadSeancesThunk} from "../../store/thunks/seances-thunks";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
+import DeleteFilmPopup from "../../components/popups/DeleteFilmPopup";
+import DeleteSeancePopup from "../../components/popups/DeleteSeancePopup";
 
 function IndexPage() {
     const {auth, token} = useSelector(state => state.auth);
@@ -24,7 +26,7 @@ function IndexPage() {
             dispatch(loadFilmsThunk());
             dispatch(loadSeancesThunk());
         }
-    }, [auth, token])
+    }, [auth, token, dispatch])
 
     return (
         <>
@@ -39,8 +41,12 @@ function IndexPage() {
 
             <AddHallPopup/>
             <DeleteHallPopup/>
-            <AddMoviePopup/>
+
+            <AddFilmPopup/>
+            <DeleteFilmPopup/>
+
             <AddSeancePopup/>
+            <DeleteSeancePopup/>
         </>
     )
 }

@@ -1,0 +1,9 @@
+.opened-for-sales__opened {
+    color: #0a828a;
+    font-weight: bold;
+}
+
+.opened-for-sales__closed {
+    color: #ff85b1;
+    font-weight: bold;
+}

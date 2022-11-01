@@ -3,9 +3,12 @@ import {createSlice} from "@reduxjs/toolkit";
 const initialState = {
     hallAddPopup: false,
     hallDeletePopup: false,
-    movieAddPopup: false,
-    showtimeAddPopup: false,
-    showtimeDeletePopup: false,
+
+    filmAddPopup: false,
+    filmDeletePopup: false,
+
+    seanceAddPopup: false,
+    seanceDeletePopup: false,
 }
 
 export const popupSlice = createSlice({

@@ -2,14 +2,12 @@ import {useDispatch, useSelector} from "react-redux";
 import {clearPopupVisible} from "../../store/slices/popup-slice/popup-slice";
 import PopupHeader from "./popup-header/PopupHeader";
 import PopupContainer from "./popup-container/PopupContainer";
-import {useState} from "react";
 import PopupSubmitButton from "./popup-submit-button/PopupSubmitButton";
 import PopupCancelButton from "./popup-cancel-button/PopupCancelButton";
 import {checkAvailableTime} from "../../utils/seances-utils";
 import {saveSeanceThunk} from "../../store/thunks/seances-thunks";
 import {timeStringToMinutes} from "../../utils/time-utils";
 import {setSeanceStartTime} from "../../store/slices/config-slices/seance-config-slice";
-import PopupControlledInput from "./popup-controlled-input/PopupControlledInput";
 
 function AddSeancePopup() {
     const {showtimeAddPopup} = useSelector(state => state.popup);

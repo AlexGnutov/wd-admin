@@ -1,10 +1,14 @@
 import {minutesToTimeString} from "../../../../../utils/time-utils";
 import PropTypes from "prop-types";
 import {calcSeanceBoxPosition, calcSeanceBoxWidth} from "../../../../../utils/seances-utils";
+import {useDispatch} from "react-redux";
+import {setSeanceToDelete} from "../../../../../store/slices/delete-items-slice";
+import {setPopupVisible} from "../../../../../store/slices/popup-slice/popup-slice";
 
 function SeanceBox(props) {
     const {seance} = props;
     const {title, duration} = seance['filmData'];
+    const dispatch = useDispatch();
 
     const style = {
         width: calcSeanceBoxWidth(duration),
@@ -12,8 +16,14 @@ function SeanceBox(props) {
         left: calcSeanceBoxPosition(seance.startTime),
     }
 
+    const openSeanceDeletePopup = (seance) => {
+        dispatch(setSeanceToDelete(seance));
+        dispatch(setPopupVisible({popupName: 'seanceDeletePopup'}));
+    }
+
     return (
         <div
+            onClick={() => openSeanceDeletePopup(seance)}
             key={seance.id}
             className="conf-step__seances-movie"
             style={style}

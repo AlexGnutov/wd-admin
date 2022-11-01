@@ -1,32 +1,45 @@
-function DeleteSeancePopup() {
-    return (
-        <div className="popup">
-            <div className="popup__container">
-                <div className="popup__content">
-                    <div className="popup__header">
-                        <h2 className="popup__title">
-                            Снятие с сеанса
-                            <a className="popup__dismiss" href="#">
-                                <img src="i/close.png" alt="Закрыть"/>
-                            </a>
-                        </h2>
+import {useDispatch, useSelector} from "react-redux";
+import {clearPopupVisible} from "../../store/slices/popup-slice/popup-slice";
+import {setSeanceToDelete} from "../../store/slices/delete-items-slice";
+import PopupContainer from "./popup-container/PopupContainer";
+import PopupHeader from "./popup-header/PopupHeader";
+import PopupSubmitButton from "./popup-submit-button/PopupSubmitButton";
+import PopupCancelButton from "./popup-cancel-button/PopupCancelButton";
+import {deleteSeanceThunk} from "../../store/thunks/seances-thunks";
 
-                    </div>
-                    <div className="popup__wrapper">
-                        <form action="вудуеу_hall" method="post" accept-charset="utf-8">
-                            <p className="conf-step__paragraph">Вы действительно хотите снять с сеанса
-                                фильм <span></span>?</p>
-                            {/*!-- В span будет подставляться название фильма -->*/}
-                            <div className="conf-step__buttons text-center">
-                                <input type="submit" value="Удалить"
-                                       className="conf-step__button conf-step__button-accent"/>
-                                    <button className="conf-step__button conf-step__button-regular">Отменить</button>
-                            </div>
-                        </form>
-                    </div>
+function DeleteSeancePopup() {
+    const {seanceDeletePopup} = useSelector(state => state.popup);
+    const {seanceToDelete} = useSelector(state => state.delete)
+    const dispatch = useDispatch();
+
+    const closePopup = () => {
+        dispatch(clearPopupVisible({popupName: 'seanceDeletePopup'}));
+        dispatch(setSeanceToDelete(null));
+    }
+
+    const deleteSeance = (e) => {
+        e.preventDefault();
+        if (seanceToDelete) {
+            dispatch(deleteSeanceThunk(seanceToDelete.id));
+        }
+    }
+
+    return (
+        <PopupContainer active={seanceDeletePopup}
+                        header={<PopupHeader title={'Удаление сеанса'} onCloseClick={closePopup}/>}>
+
+            {/*Popup content starts*/}
+            <form onSubmit={deleteSeance}>
+                <p className="conf-step__paragraph">
+                    Вы действительно хотите удалить сеанс
+                    {seanceToDelete ? <span> {`"${seanceToDelete.id}"`}?</span> : null}
+                </p>
+                <div className="conf-step__buttons text-center">
+                    <PopupSubmitButton buttonTitle={'Удалить'}/>
+                    <PopupCancelButton onCancelClick={closePopup}/>
                 </div>
-            </div>
-        </div>
+            </form>
+        </PopupContainer>
     )
 }
 

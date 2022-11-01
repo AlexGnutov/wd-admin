@@ -2,7 +2,7 @@ import PopupHeader from "./popup-header/PopupHeader";
 import PopupCancelButton from "./popup-cancel-button/PopupCancelButton";
 import {useDispatch, useSelector} from "react-redux";
 import {clearPopupVisible} from "../../store/slices/popup-slice/popup-slice";
-import {useState} from "react";
+import {useRef, useState} from "react";
 import {saveFilmThunk} from "../../store/thunks/films-thunks";
 import PopupControlledInput from "./popup-controlled-input/PopupControlledInput";
 import PopupSubmitButton from "./popup-submit-button/PopupSubmitButton";
@@ -14,15 +14,15 @@ const initialState = {
     duration: 60,
     origin: '',
     imageText: '',
-    imageFileName: '',
 };
 
-function AddMoviePopup() {
-    const {movieAddPopup} = useSelector(state => state.popup);
+function AddFilmPopup() {
+    const {filmAddPopup} = useSelector(state => state.popup);
     const dispatch = useDispatch();
+    const fileRef = useRef();
 
     const closePopup = () => {
-        dispatch(clearPopupVisible({popupName: 'movieAddPopup'}))
+        dispatch(clearPopupVisible({popupName: 'filmAddPopup'}))
     }
 
     const [filmData, setFilmData] = useState(initialState);
@@ -37,8 +37,15 @@ function AddMoviePopup() {
         e.preventDefault();
         const formData = new FormData();
         Object.keys(filmData).forEach((key) => {
-            formData.set(key, filmData[key]);
+            formData.append(key, filmData[key]);
         })
+
+        formData.append('imageFile', fileRef.current?.files[0]);
+
+        for (const key of formData.values()) {
+            console.log(key);
+        }
+
         dispatch(saveFilmThunk(formData));
 
         setFilmData(initialState);
@@ -47,7 +54,7 @@ function AddMoviePopup() {
 
     return (
         <PopupContainer
-            active={movieAddPopup}
+            active={filmAddPopup}
             header={<PopupHeader title={'Добавление фильма'} onCloseClick={closePopup}/>}
         >
             {/*Popup content starts here*/}
@@ -82,11 +89,17 @@ function AddMoviePopup() {
                     name={'imageText'} label={'Текст к изображению'} type={'text'}
                     onChange={onValueChange}
                 />
-                <PopupControlledInput
-                    value={filmData.imageFileName}
-                    name={'imageFileName'} label={'Имя файла постера'} type={'text'}
-                    onChange={onValueChange}
-                />
+                <label className="conf-step__label conf-step__label-fullsize" htmlFor="title">
+                    Постер к фильму
+                    <input
+                        accept={".png, .jpg, .jpeg"}
+                        className="conf-step__input"
+                        type="file"
+                        name={'imageFile'}
+                        required={true}
+                        ref={fileRef}
+                    />
+                </label>
                 <div className="conf-step__buttons text-center">
                     <PopupSubmitButton buttonTitle={'Добавить фильм'}/>
                     <PopupCancelButton onCancelClick={closePopup}/>
@@ -96,4 +109,4 @@ function AddMoviePopup() {
     )
 }
 
-export default AddMoviePopup;
+export default AddFilmPopup;

@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {setPopupVisible} from "../../../store/slices/popup-slice/popup-slice";
 import ActionButton from "../../common/action-button/ActionButton";
 import {setHallToDelete} from "../../../store/slices/delete-items-slice";
+import OpenedForSales from "./opened-for-sales/OpenedForSales";
 
 export default function ManageHalls() {
     const {hallsList} = useSelector(state => state.halls);
@@ -24,10 +25,11 @@ export default function ManageHalls() {
                 {
                     hallsList.map((hall) =>
                         <li key={hall.id}>
-                            {hall.title}
+                            {hall.title} {' '}
                             <button className="conf-step__button conf-step__button-trash"
                                     onClick={() => openHallDeletePopup(hall)}
-                            />
+                            /> {' '}
+                            <OpenedForSales opened={!!hall.openedForSales}/>
                         </li>)
                 }
             </ul>

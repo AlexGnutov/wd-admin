@@ -1,23 +1,22 @@
-import poster from "../../../../i/poster.png";
 import {useDispatch, useSelector} from "react-redux";
 import {setPopupVisible} from "../../../../store/slices/popup-slice/popup-slice";
 import {setSeanceFilm} from "../../../../store/slices/config-slices/seance-config-slice";
+import {setFilmToDelete} from "../../../../store/slices/delete-items-slice";
+
+const filmImagesRoot = process.env.REACT_APP_BASE_URL || window.location;
 
 function Films() {
     const {filmsList} = useSelector(state => state.films);
     const dispatch = useDispatch();
 
     const createFilm = () => {
-        dispatch(setPopupVisible({popupName: 'movieAddPopup'}));
+        dispatch(setPopupVisible({popupName: 'filmAddPopup'}));
     }
 
-    // TODO: make film delete option
-    /*
     const openFilmDeletePopup = (film) => {
         dispatch(setFilmToDelete(film));
-        console.log('Film to delete', id);
+        dispatch(setPopupVisible({popupName: 'filmDeletePopup'}))
     }
-    */
 
     const setDragValue = (film) => {
         dispatch(setSeanceFilm(film));
@@ -37,12 +36,16 @@ function Films() {
                     <div
                         key={film.id}
                         className="conf-step__movie"
-                        // TODO: make film delete option
-                        // onClick={() => {openFilmDeletePopup(film)}}
+                        onClick={() => {openFilmDeletePopup(film)}}
                         onDragStart={() => setDragValue(film)}
                         draggable={true}
                     >
-                        <img className="conf-step__movie-poster" alt={film['imageText']} src={poster} draggable={false}/>
+                        <img
+                            className="conf-step__movie-poster"
+                            alt={film['imageText']}
+                            src={filmImagesRoot + process.env.REACT_APP_IMAGES + film.imageFileName}
+                            draggable={false}
+                        />
                         <h3 className="conf-step__movie-title">{film.title}</h3>
                         <p className="conf-step__movie-duration">{film.duration} мин.</p>
                     </div>

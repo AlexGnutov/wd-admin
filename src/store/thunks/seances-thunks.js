@@ -3,6 +3,8 @@ import {
     loadingSeancesOk,
     loadingSeancesReq, savingSeanceErr, savingSeanceOk, savingSeanceReq,
 } from "../slices/data-slices/seances-slice";
+import {setSeanceToDelete} from "../slices/delete-items-slice";
+import {clearPopupVisible} from "../slices/popup-slice/popup-slice";
 
 const server = process.env.REACT_APP_BASE_URL;
 const API = process.env.REACT_APP_SEANCES;
@@ -47,6 +49,28 @@ export const saveSeanceThunk = (seanceData) => {
             }
         } catch (e) {
             dispatch(savingSeanceErr());
+        }
+    }
+}
+
+export const deleteSeanceThunk = (id) => {
+    return async (dispatch, getState) => {
+        const token = getState().auth.token;
+        dispatch(loadingSeancesReq());
+        try {
+            const reply = await fetch(basePath + `/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization' : `Bearer ${token}`,
+                },
+            }).then(x => x.json());
+            if (reply.status === 'ok') {
+                dispatch(setSeanceToDelete(null));
+                dispatch(clearPopupVisible({popupName: 'seanceDeletePopup'}));
+                dispatch(loadSeancesThunk());
+            }
+        } catch (e) {
+            dispatch(loadingSeancesErr());
         }
     }
 }

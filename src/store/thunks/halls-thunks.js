@@ -9,7 +9,7 @@ import {setHallToDelete} from "../slices/delete-items-slice";
 
 const server = process.env.REACT_APP_BASE_URL;
 const API = process.env.REACT_APP_HALLS;
-const basePath = server + API ;
+const basePath = server + API;
 
 export const loadHallsThunk = () => {
     return async (dispatch, getState) => {
@@ -18,7 +18,7 @@ export const loadHallsThunk = () => {
         try {
             const reply = await fetch(basePath, {
                 headers: {
-                    'Authorization' : `Bearer ${token}`,
+                    'Authorization': `Bearer ${token}`,
                 }
             }).then(r => r.json());
 
@@ -47,7 +47,7 @@ export const deleteHallThunk = (id) => {
             const reply = await fetch(basePath + `/${id}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization' : `Bearer ${token}`,
+                    'Authorization': `Bearer ${token}`,
                 },
             }).then(x => x.json());
             if (reply.status === 'ok') {
@@ -70,8 +70,8 @@ export const createHallThunk = (hallData) => {
                 method: 'POST',
                 body: JSON.stringify(hallData),
                 headers: {
-                    'Content-Type':'application/json',
-                    'Authorization' : `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
             }).then(x => x.json());
             if (reply.status === 'ok') {
@@ -93,8 +93,8 @@ export const updateHallThunk = (updateData) => {
                 method: 'PUT',
                 body: JSON.stringify(updateData.data),
                 headers: {
-                    'Content-Type':'application/json',
-                    'Authorization' : `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
             }).then(r => r.json());
             if (reply.status === 'ok') {
@@ -104,5 +104,34 @@ export const updateHallThunk = (updateData) => {
             dispatch(loadingHallsErr());
         }
 
+    }
+}
+
+export const openHallsForSalesThunk = () => {
+    return async (dispatch, getState) => {
+        const token = getState().auth.token;
+        const halls = getState().halls.hallsList;
+
+        for (const hall of halls) {
+            try {
+                const reply = await fetch(basePath + `/${hall.id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        openedForSales: true,
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                }).then(r => r.json());
+                console.log(reply);
+                if (reply.status === 'ok') {
+                    dispatch(loadHallsThunk());
+                }
+            } catch (e) {
+                console.log(e.message);
+                dispatch(loadingHallsErr());
+            }
+        }
     }
 }

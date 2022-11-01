@@ -1,11 +1,15 @@
 import {useDispatch} from "react-redux";
-import {clearAuth} from "../../../store/slices/auth-slice/auth-slice";
 import {clearAuthTokenThunk} from "../../../store/thunks/auth-thunks";
+import {openHallsForSalesThunk} from "../../../store/thunks/halls-thunks";
 
 function SalesStart() {
     const dispatch = useDispatch();
 
-    const salesStart = () => {
+    const startSales = () => {
+        dispatch(openHallsForSalesThunk());
+    }
+
+    const logout = () => {
         dispatch(clearAuthTokenThunk());
     }
 
@@ -19,10 +23,18 @@ function SalesStart() {
                 <button
                     type="button"
                     className="conf-step__button conf-step__button-accent"
-                    onClick={salesStart}
+                    onClick={startSales}
                 >
-                    (LOGOUT)Открыть продажу билетов
+                    Открыть продажу билетов
                 </button>
+                <button
+                    type="button"
+                    className="conf-step__button conf-step__button-accent"
+                    onClick={logout}
+                >
+                    Выйти из системы
+                </button>
+
             </div>
         </section>
     )
