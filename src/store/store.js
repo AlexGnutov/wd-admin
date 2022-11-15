@@ -1,4 +1,4 @@
-import {configureStore} from "@reduxjs/toolkit";
+import { configureStore } from '@reduxjs/toolkit';
 import popupReducer from './slices/popup-slice/popup-slice';
 import hallsReducer from './slices/data-slices/halls-slice';
 import filmsReducer from './slices/data-slices/films-slice';
@@ -10,22 +10,22 @@ import deleteItemsReducer from './slices/delete-items-slice';
 
 import authReducer from './slices/auth-slice/auth-slice';
 
+// eslint-disable-next-line import/prefer-default-export
 export const store = configureStore({
-    reducer: {
-        popup: popupReducer,
+  reducer: {
+    popup: popupReducer,
 
-        // data reducers:
-        halls: hallsReducer,
-        films: filmsReducer,
-        seances: showtimesReducer,
+    // data reducers:
+    halls: hallsReducer,
+    films: filmsReducer,
+    seances: showtimesReducer,
 
-        // config reducers:
-        hallConfig: hallConfigReducer,
-        seanceConfig: seanceConfigReducer,
-        delete: deleteItemsReducer,
+    // config reducers:
+    hallConfig: hallConfigReducer,
+    seanceConfig: seanceConfigReducer,
+    delete: deleteItemsReducer,
 
-        // auth reducer:
-        auth: authReducer,
-    }
+    // auth reducer:
+    auth: authReducer,
+  },
 });
-
